@@ -140,8 +140,11 @@ export default async (request: Request, context: Context) => {
         status: 401,
         headers: {
           ...CORS_HEADERS,
-          // Hint browsers/clients they can use Basic as well
-          "www-authenticate": 'Basic realm="palm-proxy", charset="UTF-8"',
+          // Do NOT send a Basic challenge, otherwise browsers show a login popup.
+          // Use a Bearer challenge instead (standards-compliant, no popup in browsers).
+          "www-authenticate": 'Bearer realm="palm-proxy"',
+          // Optional hint header for clients/tools
+          "x-auth-required": "token",
         },
       });
     }
@@ -187,9 +190,19 @@ export default async (request: Request, context: Context) => {
     ...( { duplex: "half" } as any )
   });
 
+  // 合并上游响应头，但防止把 WWW-Authenticate 透传给浏览器（否则会弹出登录框）
+  const rawHeaders = Object.fromEntries(response.headers);
+  delete (rawHeaders as any)["www-authenticate"]; // case-insensitive 处理见下
+  // Headers 对象小写化键名，确保覆盖
+  const normalized: Record<string, string> = {};
+  for (const [k, v] of Object.entries(rawHeaders)) {
+    normalized[k.toLowerCase()] = v as any;
+  }
+  delete normalized["www-authenticate"]; // 保险删除
+
   const responseHeaders = {
     ...CORS_HEADERS,
-    ...Object.fromEntries(response.headers),
+    ...normalized,
   };
 
   return new Response(response.body, {

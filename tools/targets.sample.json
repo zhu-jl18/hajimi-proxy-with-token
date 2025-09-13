@@ -20,6 +20,8 @@
         "SiteId": "<SITE_ID_B1>",
         "Dir": ".",
         "Build": true,
-        "Env": { "PROXY_SHOW_INDEX": "true" }
+        "Env": {
+            "PROXY_SHOW_INDEX": "true"
+        }
     }
 ]
