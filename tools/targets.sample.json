@@ -1,0 +1,5 @@
+[
+  { "Token": "<PAT-账号A>", "SiteId": "<SITE_ID_A1>" },
+  { "Token": "<PAT-账号A>", "SiteId": "<SITE_ID_A2>" },
+  { "Token": "<PAT-账号B>", "SiteId": "<SITE_ID_B1>" }
+]
