@@ -1,20 +1,4 @@
-# palm-netlify-proxy
 
-Google PaLM API proxy on Netlify Edge
-
-
-## Deploy
-
-### Deploy With Netlify
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/antergone/palm-netlify-proxy)
-
-
-## Discussion
-
-Please Visit Simon's Blog. https://simonmy.com/posts/使用netlify反向代理google-palm-api.html
-
----
 
 ## 中文说明
 
@@ -86,6 +70,15 @@ ntl deploy --prod --dir .
 - 本项目无需 Build command 与 Publish directory 的特殊配置（默认即可）。
 - 每个站点在 Site settings → Environment 里分别设置各自变量（例如 `PROXY_TOKEN`）。
 - 可在“Build & deploy”里控制是否自动随 push 部署。
+
+> 关于控制台里显示的 “Skipped”
+>
+> 在 Netlify 日志里，`Initializing/Building/Deploying/Cleanup` 显示为 `Skipped` 多见于以下情况：
+> - 你使用了 `ntl deploy --prod --dir .` 进行“直传”部署（不是“构建型”部署），因此 Build 步骤被跳过；
+> - 项目没有定义 Build command，或者当前这次部署无需运行构建；
+> - 这些都是正常现象，不影响函数与重写规则的生效。若你需要强制触发一次“构建型”部署（例如希望后端重新拉取环境变量），可以：
+>   - 控制台 → Deploys → Trigger deploy → Clear cache and deploy site；或
+>   - CLI：`ntl deploy --prod --build`（在已链接对应站点的仓库目录执行）。
 
 ### 迁移已有老站点（无令牌、作为公共上游）
 

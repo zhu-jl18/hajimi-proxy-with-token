@@ -41,7 +41,9 @@ export default async (request: Request, context: Context) => {
     const fromDeno = g?.Deno?.env?.get?.(k);
     // Some runtimes may expose env via context.env
     const fromContext = (context as any)?.env?.[k];
-    return fromDeno ?? fromContext ?? undefined;
+    // Node/Classic functions: process.env（通过 globalThis 访问避免本地缺少 @types/node 的报错）
+    const fromNode = g?.process?.env?.[k];
+    return fromDeno ?? fromContext ?? fromNode ?? undefined;
   };
 
   const requiredToken = getEnv("PROXY_TOKEN");
