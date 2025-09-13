@@ -48,7 +48,12 @@ export default async (request: Request, context: Context) => {
 
   const requiredToken = getEnv("PROXY_TOKEN");
   const allowIpsRaw = getEnv("PROXY_ALLOW_IPS"); // e.g. "1.2.3.4, 5.6.0.0/16"
-  const showIndex = (getEnv("PROXY_SHOW_INDEX") || "").toLowerCase() === "true";
+  // 默认显示首页；只有当 PROXY_SHOW_INDEX 显式为 false/0/off/no 时隐藏
+  const showIndex = (() => {
+    const v = (getEnv("PROXY_SHOW_INDEX") || "").toLowerCase().trim();
+    if (v === "") return true;
+    return !["0", "false", "off", "no"].includes(v);
+  })();
 
   // helper: get client ip from headers
   const getClientIp = (req: Request): string | undefined => {
@@ -145,29 +150,11 @@ export default async (request: Request, context: Context) => {
 
   const { pathname, searchParams } = new URL(request.url);
   if(pathname === "/" && showIndex) {
-    let blank_html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Google PaLM API proxy on Netlify Edge</title>
-</head>
-<body>
-  <h1 id="google-palm-api-proxy-on-netlify-edge">Google PaLM API proxy on Netlify Edge</h1>
-  <p>Tips: This project uses a reverse proxy to solve problems such as location restrictions in Google APIs. </p>
-  <p>If you have any of the following requirements, you may need the support of this project.</p>
-  <ol>
-  <li>When you see the error message &quot;User location is not supported for the API use&quot; when calling the Google PaLM API</li>
-  <li>You want to customize the Google PaLM API</li>
-  </ol>
-  <p>For technical discussions, please visit <a href="https://simonmy.com/posts/google-palm-api-proxy-on-netlify-edge.html">https://simonmy.com/posts/google-palm-api-proxy-on-netlify-edge.html</a></p>
-</body>
-</html>
-    `
-    return new Response(blank_html, {
+    const body = "success";
+    return new Response(body, {
       headers: {
         ...CORS_HEADERS,
-        "content-type": "text/html"
+        "content-type": "text/plain; charset=utf-8"
       },
     });
   }

@@ -14,9 +14,9 @@
 
 ## 快速开始
 
-1) （可选）设置环境变量：
+1) （推荐）设置环境变量：
 	- 私有上游：`PROXY_TOKEN=<强随机>`
-	- 可选：`PROXY_SHOW_INDEX=true`、`PROXY_ALLOW_IPS="203.0.113.10, 198.51.100.0/24"`
+	- 可选：`PROXY_SHOW_INDEX=false`（隐藏首页）、`PROXY_ALLOW_IPS="203.0.113.10, 198.51.100.0/24"`
 2) 直接部署（二选一）：
 	- CLI：`ntl deploy --prod --dir .`（直传部署）或 `ntl deploy --prod --build`（构建型部署）
 	- Git：连接本仓库/分支，保存后触发构建
@@ -44,8 +44,9 @@
 	- 不配置则不启用；配置形如：`203.0.113.10, 198.51.100.0/24`。
 	- 来访 IP 从 `x-nf-client-connection-ip`（优先）、`x-forwarded-for`、`cf-connecting-ip` 中获取。
 
-4) 首页显示开关（PROXY_SHOW_INDEX）
-	- 默认隐藏首页说明；若需显示，设置 `PROXY_SHOW_INDEX=true`。
+4) 首页显示（PROXY_SHOW_INDEX）
+	- 默认首页返回简短暗号 `success`（text/plain），便于健康检查但不暴露用途。
+	- 如需隐藏首页，设置 `PROXY_SHOW_INDEX=false`（或 `0/off/no`）。
 
 ## 部署方式
 
@@ -266,10 +267,10 @@ PROXY_ALLOW_IPS=203.0.113.10, 198.51.100.0/24
 
 The proxy will only accept requests whose client IP matches this list. Client IP is read from `x-nf-client-connection-ip` (preferred), then `x-forwarded-for`, then `cf-connecting-ip`.
 
-## Optional: Hide the index page
+## Optional: Index page behavior
 
-By default the index page is hidden. To show it, set:
+By default the index returns `success` (text/plain) for simple health checks. To hide the index page, set:
 
 ```
-PROXY_SHOW_INDEX=true
+PROXY_SHOW_INDEX=false
 ```
