@@ -1,5 +1,25 @@
 [
-  { "Token": "<PAT-账号A>", "SiteId": "<SITE_ID_A1>" },
-  { "Token": "<PAT-账号A>", "SiteId": "<SITE_ID_A2>" },
-  { "Token": "<PAT-账号B>", "SiteId": "<SITE_ID_B1>" }
+    {
+        "Token": "<PAT-账号A>",
+        "SiteId": "<SITE_ID_A1>",
+        "Dir": ".",
+        "Build": false,
+        "Env": {
+            "PROXY_TOKEN": "<强随机>"
+        }
+    },
+    {
+        "Token": "<PAT-账号A>",
+        "SiteId": "<SITE_ID_A2>",
+        "Dir": ".",
+        "Build": false,
+        "Env": {}
+    },
+    {
+        "Token": "<PAT-账号B>",
+        "SiteId": "<SITE_ID_B1>",
+        "Dir": ".",
+        "Build": true,
+        "Env": { "PROXY_SHOW_INDEX": "true" }
+    }
 ]

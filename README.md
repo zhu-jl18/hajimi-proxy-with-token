@@ -130,6 +130,22 @@ ntl deploy --prod --dir .
 
 > 若需要将 `targets.sample.json` 复制为 `targets.json` 并维护自己的站点列表，记得不要把包含私密 PAT 的真实文件提交到公共仓库。
 
+`targets.sample.json` 字段说明：
+
+```json
+[
+	{
+		"Token": "<PAT>",        // 必填：该站点所属账号的 Personal Access Token
+		"SiteId": "<SITE_ID>",   // 必填：站点 ID（Site settings → General）
+		"Dir": ".",              // 可选：部署目录，默认 "."
+		"Build": false,            // 可选：true 则使用 --build，false 用直传 --dir
+		"Env": {                   // 可选：在部署前设置/覆盖的环境变量键值对
+			"PROXY_TOKEN": "<token>"
+		}
+	}
+]
+```
+
 ## gptload 上游配置建议
 
 - 指向你“私有代理站点”的上游：在自定义请求头里添加
